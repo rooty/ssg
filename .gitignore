@@ -1,4 +1,7 @@
+.idea
+.idea/*
 *.log
 *.pot
 *.pyc
 local_settings.py
+atlassian-ide-plugin.xml
