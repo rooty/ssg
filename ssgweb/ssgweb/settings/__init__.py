@@ -11,7 +11,7 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-PROJECT_PATH = os.path.join( os.path.realpath(os.path.dirname(__file__)),'../')
+PROJECT_PATH = os.path.join(os.path.realpath(os.path.dirname(__file__)), '../')
 #DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -67,9 +67,9 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+# Put strings here, like "/home/html/static" or "C:/www/django/static".
+# Always use forward slashes, even on Windows.
+# Don't forget to use absolute paths, not relative paths.
 )
 
 # List of finder classes that know how to find static files in
@@ -77,7 +77,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -86,16 +86,16 @@ SECRET_KEY = 'h%-f9!6n%-if&amp;l4-)1b0xf-p4hx_ls6-)g=lqd(elfy9v$u3wm'
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     ('django.template.loaders.cached.Loader',
-        (
-            'django.template.loaders.filesystem.Loader',
-            'django.template.loaders.app_directories.Loader',
-        )
+     (
+         'django.template.loaders.filesystem.Loader',
+         'django.template.loaders.app_directories.Loader',
+     )
     ),
 )
 
 MIDDLEWARE_CLASSES = (
-    'raven.contrib.django.middleware.Sentry404CatchMiddleware',
-    'raven.contrib.django.middleware.SentryResponseErrorIdMiddleware',
+    #'raven.contrib.django.middleware.Sentry404CatchMiddleware',
+    #'raven.contrib.django.middleware.SentryResponseErrorIdMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -130,6 +130,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'raven.contrib.django',
     'ssgweb.utils',
+    'stock',
 )
 
 RAVEN_CONFIG = {
@@ -172,20 +173,20 @@ LOGGING = {
     'root': {
         'level': 'WARNING',
         'handlers': ['sentry'],
-        },
+    },
     'formatters': {
         'verbose': {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
         },
-        },
+    },
     'handlers': {
         'sentry': {
             'level': 'ERROR',
             'class': 'raven.contrib.django.handlers.SentryHandler',
-            },
+        },
         'console': {
             'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
+            #'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         }
     },
@@ -194,19 +195,19 @@ LOGGING = {
             'level': 'ERROR',
             'handlers': ['console'],
             'propagate': False,
-            },
+        },
         'raven': {
             'level': 'DEBUG',
             'handlers': ['console'],
             'propagate': False,
-            },
+        },
         'sentry.errors': {
             'level': 'DEBUG',
             'handlers': ['console'],
             'propagate': False,
-            },
         },
-    }
+    },
+}
 
 try:
     from local import *
@@ -215,6 +216,7 @@ try:
 #
 except Exception, e:
     import os, sys, warnings
-    warnings.warn("Unable import settings/local [%s]: %s" % (type(e),  e))
+
+    warnings.warn("Unable import settings/local [%s]: %s" % (type(e), e))
     sys.exit(1)
 
