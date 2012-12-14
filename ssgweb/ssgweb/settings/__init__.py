@@ -1,7 +1,7 @@
+# -*- coding: utf-8 -*-
 # Django settings for ssgweb project.
-from raven import Client
 
-client = Client('http://74cd841ed6564f1a99ae77f6609d9860:df920f0cfc034c1ea2870f2819b2bb25@sentry.chm.od.ua/2')
+import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -11,17 +11,18 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
+PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
+#MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+#        'NAME': '/tmp/ss.db',                      # Or path to database file if using sqlite3.
+#        'USER': '',                      # Not used with sqlite3.
+#        'PASSWORD': '',                  # Not used with sqlite3.
+#        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+#        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+#    }
+#}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -85,13 +86,17 @@ SECRET_KEY = 'h%-f9!6n%-if&amp;l4-)1b0xf-p4hx_ls6-)g=lqd(elfy9v$u3wm'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    ('django.template.loaders.cached.Loader',
+        (
+            'django.template.loaders.filesystem.Loader',
+            'django.template.loaders.app_directories.Loader',
+        )
+    ),
 )
 
 MIDDLEWARE_CLASSES = (
     'raven.contrib.django.middleware.Sentry404CatchMiddleware',
+    'raven.contrib.django.middleware.SentryResponseErrorIdMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -123,17 +128,19 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'raven.contrib.django',
 )
 
 RAVEN_CONFIG = {
+    'dsn': 'http://74cd841ed6564f1a99ae77f6609d9860:df920f0cfc034c1ea2870f2819b2bb25@sentry.chm.od.ua/2',
     'register_signals': True,
 }
+
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
-"""
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -157,7 +164,7 @@ LOGGING = {
         },
     }
 }
-"""
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -199,3 +206,14 @@ LOGGING = {
             },
         },
     }
+
+try:
+    from local import *
+#except Exception:
+#    pass
+#
+except Exception, e:
+    import os, sys, warnings
+    warnings.warn("Unable import settings/local [%s]: %s" % (type(e),  e))
+    sys.exit(1)
+
